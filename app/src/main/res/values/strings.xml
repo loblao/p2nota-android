@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">P+ Notas</string>
+    <string name="gui_login_status">Fazendo login...</string>
+    <string name="gui_label_login">Login</string>
+    <string name="gui_label_login_progress">Fazendo login...</string>
+    <string name="gui_label_email">Email</string>
+    <string name="gui_label_password">Senha</string>
+    <string name="gui_label_p4ed">\@p4ed.com</string>
+    <string name="gui_label_logout">Sair</string>
+    <string name="gui_login_error_credentials">Erro: Verifique seu email e senha.</string>
+    <string name="gui_login_error_connection">Erro: Verifique sua conexão à Internet.</string>
+    <string name="gui_login_error_bad_enrollment">No momento, este aplicativo só funciona para alunos do primeiro ano da unidade SJC.</string>
+    <string name="api_login_endpoint">https://portal.p4ed.com/</string>
+    <string name="api_student_redirect">https://portal.p4ed.com/Login/AutenticacaoPortalEdrosAlunos/0</string>
+    <string name="api_grades_endpoint">https://student.p4ed.com/notas/dados</string>
+    <string name="gui_label_bimester_1">1º Bimestre</string>
+    <string name="gui_label_bimester_2">2º Bimestre</string>
+    <string name="gui_label_bimester_3">3º Bimestre</string>
+    <string name="gui_label_bimester_4">4º Bimestre</string>
+    <string name="gui_label_p1"><b>P1:</b> %.2f</string>
+    <string name="gui_label_p2"><b>P2:</b> %.2f</string>
+    <string name="gui_label_p2_needed"><b>P2:</b> Você precisa de <i>%.2f</i> ponto%s</string>
+    <string name="gui_label_bonus"><b>Bônus:</b> %.2f</string>
+    <string name="gui_data_placeholder">P1: 10.00\nP2: 10.00\nBônus: 0.8\nSituação: lorem ipsum dolor sit amet</string>
+    <string name="gui_data_status">Situação: %s</string>
+    <string name="gui_data_no_p1">Sem dados</string>
+    <string name="gui_data_status_approved">aprovado</string>
+    <string name="gui_data_status_rec" formatted="false">rec por <i>%.2f</i> ponto%s</string>
+    <string name="gui_data_too_bad"><span style="color: red;">Situação irrecuperável, você já está de rec</span></string>
+    <string name="gui_data_questions" formatted="false">Para %s quest%s, você precisa acertar %d</string>
+</resources>
+
