@@ -93,6 +93,8 @@ public class MainActivity extends Activity
                 Log.e(LOG_TAG, "mParser setup error: " + e.toString(), e);
                 finish();
             }
+
+            mParser.selectSubject(mSubjectList.getSelectedItemPosition(), this);
         }
     }
 
