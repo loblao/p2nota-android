@@ -33,7 +33,7 @@ public class GradesParser
     {
         mObj = obj;
         mContext = context;
-        mFrontData = new ArrayList<FrontData>();
+        mFrontData = new ArrayList<>();
         GUI_ERROR_CREDENTIALS = mContext.getString(R.string.gui_login_error_credentials);
         GUI_ERROR_NOT_SUPPORTED = mContext.getString(R.string.gui_login_error_bad_enrollment);
     }
@@ -138,11 +138,13 @@ public class GradesParser
         // 1 - A test called "Prova 1"
         // 2 - A test called "Prova 2"
         // 3 - NO "Prova 3"
+        // 4 - NO "Redação"
+        // 5 - NO "Relatório"
 
         float[] grades_p1 = {GRADE_NO_SUCH_TEST, GRADE_UNSET, GRADE_UNSET, GRADE_UNSET};
         float[] grades_p2 = {GRADE_NO_SUCH_TEST, GRADE_UNSET, GRADE_UNSET, GRADE_UNSET};
         float[] bonus = {0, 0, 0, 0};
-        boolean has_p3 = false;
+        boolean has_invalid_test = false;
 
         JSONArray grades = subject.getJSONArray("NotasBimestre");
         for (int bimester = 0; bimester < 4; ++bimester)
@@ -184,19 +186,19 @@ public class GradesParser
                         grades_p2[bimester] = grade;
                     }
 
-                    else if (name.contains("Prova 3"))
+                    else if (name.contains("Prova 3") || name.contains("Redação") || name.contains("Relatório"))
                     {
-                        has_p3 = true;
+                        has_invalid_test = true;
                         break;
                     }
                 }
 
-                if (has_p3)
+                if (has_invalid_test)
                     break;
             }
         }
 
-        if (has_p3)
+        if (has_invalid_test)
             return;
 
         if (grades_p1[0] == GRADE_NO_SUCH_TEST || grades_p2[0] == GRADE_NO_SUCH_TEST)
