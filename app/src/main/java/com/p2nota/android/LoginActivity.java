@@ -77,9 +77,9 @@ public class LoginActivity extends Activity
 
     private void attemptLogin()
     {
-        mUsernameEntry.setActivated(false);
-        mPasswordEntry.setActivated(false);
-        mLoginButton.setActivated(false);
+        mUsernameEntry.setEnabled(false);
+        mPasswordEntry.setEnabled(false);
+        mLoginButton.setEnabled(false);
 
         mStatusLabel.setTextColor(Color.RED);
         mStatusLabel.setText(getString(R.string.gui_label_login_progress));
@@ -103,9 +103,9 @@ public class LoginActivity extends Activity
         mStatusLabel.setTextColor(Color.RED);
         mStatusLabel.setText(issue);
 
-        mUsernameEntry.setActivated(true);
-        mPasswordEntry.setActivated(true);
-        mLoginButton.setActivated(true);
+        mUsernameEntry.setEnabled(true);
+        mPasswordEntry.setEnabled(true);
+        mLoginButton.setEnabled(true);
     }
 
     public void loginSuccessful(JSONObject grades)
