@@ -1,6 +1,7 @@
 package com.p2nota.android;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.util.Log;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ public class LoginActivity extends Activity
     private Button mLoginButton;
     private TextView mStatusLabel;
     private String mUsername;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,13 +33,10 @@ public class LoginActivity extends Activity
         setContentView(R.layout.login_activity);
 
         mUsernameEntry = (EditText) findViewById(R.id.username);
-        mUsernameEntry.setOnEditorActionListener(new TextView.OnEditorActionListener()
-        {
+        mUsernameEntry.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent)
-            {
-                if (id == R.id.username || id == EditorInfo.IME_NULL)
-                {
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.username || id == EditorInfo.IME_NULL) {
                     mPasswordEntry.requestFocus();
                     return true;
                 }
@@ -60,11 +59,9 @@ public class LoginActivity extends Activity
         });
 
         mLoginButton = (Button) findViewById(R.id.login_button);
-        mLoginButton.setOnClickListener(new OnClickListener()
-        {
+        mLoginButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 attemptLogin();
             }
         });
@@ -81,8 +78,12 @@ public class LoginActivity extends Activity
         mPasswordEntry.setEnabled(false);
         mLoginButton.setEnabled(false);
 
-        mStatusLabel.setTextColor(Color.RED);
-        mStatusLabel.setText(getString(R.string.gui_label_login_progress));
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setMessage(getString(R.string.gui_label_login_progress));
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
 
         try
         {
@@ -100,6 +101,7 @@ public class LoginActivity extends Activity
 
     public void loginError(String issue)
     {
+        mProgressDialog.dismiss();
         mStatusLabel.setTextColor(Color.RED);
         mStatusLabel.setText(issue);
 
@@ -110,6 +112,7 @@ public class LoginActivity extends Activity
 
     public void loginSuccessful(JSONObject grades)
     {
+        mProgressDialog.dismiss();
         GradesParser parser = new GradesParser(this, grades);
         Log.i(LOG_TAG, "loginSuccessful");
         Log.i(LOG_TAG, parser.success() ? "SUCCESS": "FAILURE");

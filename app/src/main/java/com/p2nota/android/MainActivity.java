@@ -96,6 +96,11 @@ public class MainActivity extends Activity
 
             mParser.selectSubject(mSubjectList.getSelectedItemPosition(), this);
         }
+
+        else
+        {
+            finish();
+        }
     }
 
     public void addSubject(String subject)
