@@ -20,6 +20,8 @@
         </activity>
         <activity
             android:name=".LoginActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
     </application>
