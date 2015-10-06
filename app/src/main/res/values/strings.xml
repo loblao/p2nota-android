@@ -9,7 +9,7 @@
     <string name="gui_label_logout">Sair</string>
     <string name="gui_login_error_credentials">Erro: Verifique seu email e senha.</string>
     <string name="gui_login_error_connection">Erro: Verifique sua conexão à Internet.</string>
-    <string name="gui_login_error_bad_enrollment">No momento, este aplicativo só funciona para alunos do primeiro ano da unidade SJC.</string>
+    <string name="gui_login_error_bad_enrollment">Este aplicativo não é compatível com a matrícula encontrada.</string>
     <string name="api_login_endpoint">https://portal.p4ed.com/</string>
     <string name="api_student_redirect">https://portal.p4ed.com/Login/AutenticacaoPortalEdrosAlunos/0</string>
     <string name="api_grades_endpoint">https://student.p4ed.com/notas/dados</string>

@@ -47,10 +47,8 @@ public class LoginActivity extends Activity
         mPasswordEntry = (EditText) findViewById(R.id.password);
         mPasswordEntry.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent)
-            {
-                if (id == R.id.password || id == EditorInfo.IME_NULL)
-                {
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.password || id == EditorInfo.IME_NULL) {
                     attemptLogin();
                     return true;
                 }
@@ -70,6 +68,11 @@ public class LoginActivity extends Activity
         mStatusLabel.setText("");
 
         mUsernameEntry.setText(sManager.getUsername(this));
+
+        Intent i = getIntent();
+        String error = i.getStringExtra("error");
+        if (error != null && error.length() > 0)
+            loginError(error);
     }
 
     private void attemptLogin()
@@ -101,7 +104,12 @@ public class LoginActivity extends Activity
 
     public void loginError(String issue)
     {
-        mProgressDialog.dismiss();
+        if (mProgressDialog != null)
+        {
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+        }
+
         mStatusLabel.setTextColor(Color.RED);
         mStatusLabel.setText(issue);
 

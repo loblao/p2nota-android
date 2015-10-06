@@ -1,14 +1,11 @@
 package com.p2nota.android;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.View;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.json.*;
@@ -24,7 +21,6 @@ public class GradesParser
 
     // TO DO: use strings.xml
     static String GUI_ERROR_CREDENTIALS;
-    static String GUI_ERROR_NOT_SUPPORTED;
     JSONObject mObj;
     Context mContext;
     List<FrontData> mFrontData;
@@ -35,17 +31,13 @@ public class GradesParser
         mContext = context;
         mFrontData = new ArrayList<>();
         GUI_ERROR_CREDENTIALS = mContext.getString(R.string.gui_login_error_credentials);
-        GUI_ERROR_NOT_SUPPORTED = mContext.getString(R.string.gui_login_error_bad_enrollment);
     }
 
     boolean success()
     {
         try
         {
-            if (!mObj.getBoolean("Sucesso"))
-                return false;
-
-            return isValidAccount();
+            return mObj.getBoolean("Sucesso");
         }
 
         catch (Exception e)
@@ -59,9 +51,6 @@ public class GradesParser
         if (!mObj.getBoolean("Sucesso"))
             return GUI_ERROR_CREDENTIALS;
 
-        if (!isValidAccount())
-            return GUI_ERROR_NOT_SUPPORTED;
-
         return "OK";
     }
 
@@ -73,19 +62,6 @@ public class GradesParser
     String getEnrollment() throws Exception
     {
         return mObj.getJSONObject("Dados").getJSONObject("DadosPagina").getJSONArray("Matriculas").getJSONObject(0).getString("Nome");
-    }
-
-    boolean isValidAccount()
-    {
-        try
-        {
-            return getEnrollment().contains("Primeiro Ano - SJC");
-        }
-
-        catch (Exception e)
-        {
-            return false;
-        }
     }
 
     void setupUi(MainActivity activity) throws Exception
@@ -129,6 +105,9 @@ public class GradesParser
                 handleFront(subject, activity);
             }
         }
+
+        if (mFrontData.size() == 0)
+            throw new EmptySubjectList();
     }
 
     void handleFront(JSONObject subject, MainActivity activity) throws Exception
@@ -143,6 +122,7 @@ public class GradesParser
 
         float[] grades_p1 = {GRADE_NO_SUCH_TEST, GRADE_UNSET, GRADE_UNSET, GRADE_UNSET};
         float[] grades_p2 = {GRADE_NO_SUCH_TEST, GRADE_UNSET, GRADE_UNSET, GRADE_UNSET};
+        float[] grades_final = {GRADE_UNSET, GRADE_UNSET, GRADE_UNSET, GRADE_UNSET};
         float[] bonus = {0, 0, 0, 0};
         boolean has_invalid_test = false;
 
@@ -152,6 +132,7 @@ public class GradesParser
             if (bimester >= grades.length())
                 break;
 
+            grades_final[bimester] = extractFloat(grades.getJSONObject(bimester).getString("Nota"), GRADE_UNSET);
             JSONArray tests = grades.getJSONObject(bimester).getJSONArray("Provas");
             if (tests.length() > 0)
             {
@@ -160,16 +141,7 @@ public class GradesParser
                     JSONObject test = tests.getJSONObject(i);
                     String name = test.getString("Nome");
 
-                    float grade;
-                    try
-                    {
-                        grade = Float.parseFloat(test.getString("Nota").replace(",", "."));
-                    }
-
-                    catch(NumberFormatException e)
-                    {
-                        grade = GRADE_UNSET;
-                    }
+                    float grade = extractFloat(test.getString("Nota"), GRADE_UNSET);
 
                     if (name.contains("Bônus"))
                     {
@@ -211,13 +183,17 @@ public class GradesParser
         dt.name = name;
         dt.grades_p1 = grades_p1;
         dt.grades_p2 = grades_p2;
+        dt.grades_final = grades_final;
         dt.bonus = bonus;
 
         mFrontData.add(dt);
     }
 
-    public void selectSubject(int index, MainActivity activity)
+    public int selectSubject(int index, MainActivity activity)
     {
+        if (index >= mFrontData.size() || index < 0)
+            index = 0;
+
         FrontData dt = mFrontData.get(index);
 
         TextView label_b1 = (TextView) activity.findViewById(R.id.label_b1);
@@ -250,7 +226,7 @@ public class GradesParser
             {
                 htmlData += String.format(activity.getString(R.string.gui_label_p2), p2) + "<br/>";
                 htmlData += bonusData;
-                float total = (p1 + p2) / 2 + bonus;
+                float total = dt.grades_final[bimester];
                 float delta = total - 6;
                 color = (delta >= 0) ? Color.GREEN : Color.RED;
                 htmlData += "<br/>$";
@@ -316,15 +292,17 @@ public class GradesParser
             htmlData += "</p>";
             applyColor(label, Html.fromHtml(htmlData).toString(), color);
         }
+
+        return index;
     }
 
     // Helpers
-    String getPlural(float value)
+    private String getPlural(float value)
     {
         return (value < 2) ? "" : "s";
     }
 
-    String getPlural2(float value)
+    private String getPlural2(float value)
     {
         return (value < 2) ? "ão" : "ões";
     }
@@ -338,7 +316,7 @@ public class GradesParser
             str.setSpan(new ForegroundColorSpan(color), i, htmlData.replace("$", "").length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    static public String join(List<String> list, String conjunction)
+    private String join(List<String> list, String conjunction)
     {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
@@ -353,12 +331,30 @@ public class GradesParser
         return sb.toString();
     }
 
+    private float extractFloat(String value, float defaultValue)
+    {
+        try
+        {
+            return Float.parseFloat(value.replace(",", "."));
+        }
+
+        catch (NumberFormatException e)
+        {
+            return defaultValue;
+        }
+    }
 
     private class FrontData
     {
         public String name;
         public float[] grades_p1;
         public float[] grades_p2;
+        public float[] grades_final;
         public float[] bonus;
+    }
+
+    public class EmptySubjectList extends Exception
+    {
+
     }
 }

@@ -34,7 +34,8 @@ public class MainActivity extends Activity
         mSubjectList.setAdapter(mSubjectListAdapter);
 
         final MainActivity activity = this;
-        mSubjectList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSubjectList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
@@ -42,7 +43,8 @@ public class MainActivity extends Activity
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
+            public void onNothingSelected(AdapterView<?> arg0)
+            {
             }
         });
 
@@ -60,10 +62,16 @@ public class MainActivity extends Activity
         showLogin();
     }
 
-    private void showLogin()
+    private void showLogin(String error)
     {
         Intent i = new Intent(this, LoginActivity.class);
+        i.putExtra("error", error);
         startActivityForResult(i, 1);
+    }
+
+    private void showLogin()
+    {
+        showLogin("");
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -85,7 +93,13 @@ public class MainActivity extends Activity
 
             try
             {
+                clearSubjects();
                 mParser.setupUi(this);
+            }
+
+            catch (GradesParser.EmptySubjectList e)
+            {
+                showLogin(getString(R.string.gui_login_error_bad_enrollment));
             }
 
             catch (Exception e)
@@ -94,7 +108,9 @@ public class MainActivity extends Activity
                 finish();
             }
 
-            mParser.selectSubject(mSubjectList.getSelectedItemPosition(), this);
+            int selected = mParser.selectSubject(mSubjectList.getSelectedItemPosition(), this);
+            if (selected != mSubjectList.getSelectedItemPosition())
+                mSubjectList.setSelection(selected);
         }
 
         else
