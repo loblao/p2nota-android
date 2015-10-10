@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import org.json.JSONObject;
@@ -19,7 +20,7 @@ public class MainActivity extends Activity
     private Spinner mSubjectList;
     private ArrayAdapter<String> mSubjectListAdapter;
     private GradesParser mParser;
-    private Button mLogoutButton;
+    private ImageButton mLogoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class MainActivity extends Activity
             }
         });
 
-        mLogoutButton = (Button) findViewById(R.id.logout_button);
+        mLogoutButton = (ImageButton) findViewById(R.id.logout_button);
         mLogoutButton.setOnClickListener(new View.OnClickListener()
         {
             @Override

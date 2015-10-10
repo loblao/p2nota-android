@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import org.json.JSONObject;
 
@@ -21,7 +22,7 @@ public class LoginActivity extends Activity
     static LoginManager sManager = new LoginManager();
     private EditText mUsernameEntry;
     private EditText mPasswordEntry;
-    private Button mLoginButton;
+    private ImageButton mLoginButton;
     private TextView mStatusLabel;
     private String mUsername;
     private ProgressDialog mProgressDialog;
@@ -56,7 +57,7 @@ public class LoginActivity extends Activity
             }
         });
 
-        mLoginButton = (Button) findViewById(R.id.login_button);
+        mLoginButton = (ImageButton) findViewById(R.id.login_button);
         mLoginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

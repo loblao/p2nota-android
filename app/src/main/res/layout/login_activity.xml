@@ -96,17 +96,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <Button
+                <ImageButton
                     android:id="@+id/login_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/gui_label_login"
-                    android:layout_marginTop="10dp"
+                    android:background="@drawable/login"
+                    android:layout_marginTop="35dp"
                     android:layout_centerHorizontal="true"
                     android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
-

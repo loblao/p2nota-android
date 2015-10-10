@@ -122,12 +122,12 @@
                 android:gravity="center"
                 android:text="@string/gui_data_placeholder"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/logout_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/gui_label_logout"
-                android:layout_gravity="center" />
+                android:background="@drawable/logout"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
     </ScrollView>
