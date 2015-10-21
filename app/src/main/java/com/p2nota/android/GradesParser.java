@@ -145,7 +145,7 @@ public class GradesParser
 
                     if (name.contains("Bônus"))
                     {
-                        bonus[bimester] = grade;
+                        bonus[bimester] = (grade == GRADE_UNSET ? 0 : grade);
                     }
 
                     else if (name.contains("Prova 1"))
